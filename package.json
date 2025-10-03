@@ -11,6 +11,12 @@
   "license": "ISC",
   "packageManager": "pnpm@10.17.1",
   "devDependencies": {
-    "@biomejs/biome": "^2.2.5"
+    "@biomejs/biome": "^2.2.5",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.5"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.6",
+    "pg": "^8.16.3"
   }
 }
