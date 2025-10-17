@@ -10,6 +10,7 @@
 		"db:studio": "drizzle-kit studio",
 		"docker:up": "docker compose --env-file .env up -d",
 		"docker:down": "docker compose down",
+		"docker:logs": "docker compose logs -f",
 		"prestart:dev": "docker compose --env-file .env up -d",
 		"start:dev": "tsx watch --env-file=.env ./src/server.ts",
 		"build": "tsup --out-dir build",
