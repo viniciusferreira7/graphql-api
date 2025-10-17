@@ -8,6 +8,7 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
+		"db:seed": "tsx --env-file=.env ./src/db/seed.ts",
 		"docker:up": "docker compose --env-file .env up -d",
 		"docker:down": "docker compose down",
 		"docker:logs": "docker compose logs -f",
@@ -22,6 +23,7 @@
 	"packageManager": "pnpm@10.17.1",
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
+		"@faker-js/faker": "^10.1.0",
 		"@types/node": "^24.7.1",
 		"@types/pg": "^8.15.5",
 		"drizzle-kit": "^0.31.5",
