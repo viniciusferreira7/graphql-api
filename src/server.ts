@@ -1,27 +1,9 @@
-import { ApolloServer } from '@apollo/server';
-import {
-	fastifyApolloDrainPlugin,
-	fastifyApolloHandler,
-} from '@as-integrations/fastify';
-import { buildSchema } from 'drizzle-graphql';
 import { app } from './app';
-import { db } from './db/client';
 import { env } from './env';
+import { apolloServer } from './lib/apolo';
 
 async function start() {
-	const { schema } = buildSchema(db);
-
-	const apollo = new ApolloServer({
-		schema,
-		plugins: [fastifyApolloDrainPlugin(app)],
-	});
-	await apollo.start();
-
-	app.route({
-		url: '/graphql',
-		method: ['POST', 'GET', 'OPTIONS'],
-		handler: fastifyApolloHandler(apollo),
-	});
+	await apolloServer(app);
 
 	await app
 		.listen({
