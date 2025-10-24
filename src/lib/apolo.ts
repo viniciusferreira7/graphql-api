@@ -5,10 +5,43 @@ import {
 } from '@as-integrations/fastify';
 import { buildSchema } from 'drizzle-graphql';
 import type { FastifyInstance } from 'fastify';
+import {
+	GraphQLList,
+	GraphQLNonNull,
+	GraphQLObjectType,
+	GraphQLSchema,
+} from 'graphql';
 import { db } from '@/db/client';
+import { schema as dbSchema } from '@/db/schema';
 
 export async function apolloServer(app: FastifyInstance) {
-	const { schema } = buildSchema(db);
+	const { entities } = buildSchema(db);
+
+	const schema = new GraphQLSchema({
+		query: new GraphQLObjectType({
+			name: 'Query',
+			fields: {
+				users: {
+					type: new GraphQLList(new GraphQLNonNull(entities.types.UsersItem)),
+					args: {
+						where: {
+							type: entities.inputs.UsersFilters,
+						},
+					},
+					resolve: async (source, args, context, info) => {
+						console.log({ source, args, context, info });
+						const result = await db
+							.select({
+								name: dbSchema.users.name,
+							})
+							.from(dbSchema.users);
+
+						return result;
+					},
+				},
+			},
+		}),
+	});
 
 	const apollo = new ApolloServer({
 		schema,
