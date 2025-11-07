@@ -10,6 +10,7 @@ import {
 	GraphQLNonNull,
 	GraphQLObjectType,
 	GraphQLSchema,
+	GraphQLString,
 } from 'graphql';
 import { db } from '@/db/client';
 import { schema as dbSchema } from '@/db/schema';
@@ -17,26 +18,40 @@ import { schema as dbSchema } from '@/db/schema';
 export async function apolloServer(app: FastifyInstance) {
 	const { entities } = buildSchema(db);
 
+	const sabeUserType = new GraphQLObjectType({
+		name: 'SafeUser',
+		fields: {
+			id: { type: new GraphQLNonNull(GraphQLString) },
+			name: { type: new GraphQLNonNull(GraphQLString) },
+			email: { type: new GraphQLNonNull(GraphQLString) },
+			createdAt: { type: new GraphQLNonNull(GraphQLString) },
+			updatedAt: { type: new GraphQLNonNull(GraphQLString) },
+		},
+	});
+
 	const schema = new GraphQLSchema({
 		query: new GraphQLObjectType({
 			name: 'Query',
 			fields: {
 				users: {
-					type: new GraphQLList(new GraphQLNonNull(entities.types.UsersItem)),
+					type: new GraphQLList(sabeUserType),
 					args: {
 						where: {
 							type: entities.inputs.UsersFilters,
 						},
 					},
-					resolve: async (source, args, context, info) => {
-						console.log({ source, args, context, info });
-						const result = await db
+					resolve: async (_source, _args, _context, _info) => {
+						const users = await db
 							.select({
+								id: dbSchema.users.id,
 								name: dbSchema.users.name,
+								email: dbSchema.users.email,
+								createdAt: dbSchema.users.createdAt,
+								updatedAt: dbSchema.users.updatedAt,
 							})
 							.from(dbSchema.users);
 
-						return result;
+						return users;
 					},
 				},
 			},
