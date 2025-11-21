@@ -28,7 +28,6 @@ export async function apolloServer(app: FastifyInstance) {
 			updatedAt: { type: new GraphQLNonNull(GraphQLString) },
 		},
 	});
-
 	const schema = new GraphQLSchema({
 		query: new GraphQLObjectType({
 			name: 'Query',
@@ -40,7 +39,7 @@ export async function apolloServer(app: FastifyInstance) {
 							type: entities.inputs.UsersFilters,
 						},
 					},
-					resolve: async (_source, _args, _context, _info) => {
+					resolve: async (_source) => {
 						const users = await db
 							.select({
 								id: dbSchema.users.id,

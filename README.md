@@ -1,7 +1,5 @@
 # GraphQL API
 
-> ⚠️ **Work In Progress** - This project is currently under active development
-
 A GraphQL API built with Fastify, Apollo Server, and Drizzle ORM for managing users and their pets.
 
 ## Tech Stack
